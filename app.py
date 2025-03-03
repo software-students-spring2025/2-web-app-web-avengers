@@ -192,6 +192,7 @@ def create_app():
             "$or": [
                 {"name": {"$regex": search_term, "$options": "i"}},
                 {"date": {"$regex": search_term, "$options": "i"}},
+                {"time": {"$regex": search_term, "$options": "i"}},
                 {"description": {"$regex": search_term, "$options": "i"}},
                 {"location": {"$regex": search_term, "$options": "i"}},
                 {"category": {"$regex": search_term, "$options": "i"}}
