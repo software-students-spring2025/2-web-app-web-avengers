@@ -59,6 +59,7 @@ def create_app():
         return None
 
     @app.route("/home")
+    @flask_login.login_required
     def show_home():
         user_id = flask_login.current_user.id
 
@@ -111,6 +112,7 @@ def create_app():
         return redirect(url_for("login"))
     
     @app.route("/add", methods=["GET", "POST"])
+    @flask_login.login_required
     def add_event():
         if request.method == "POST":
             user_id = flask_login.current_user.id
@@ -129,6 +131,7 @@ def create_app():
         return render_template("addEvent.html")
     
     @app.route("/edit/<event_id>", methods=["GET", "POST"])
+    @flask_login.login_required
     def edit_event(event_id):
         user_id = flask_login.current_user.id
 
@@ -152,6 +155,7 @@ def create_app():
         return render_template("edit.html", event=event)
     
     @app.route("/details/<event_id>")
+    @flask_login.login_required
     def show_details(event_id):
         event = db.events.find_one({"_id": ObjectId(event_id)})
         
@@ -161,6 +165,7 @@ def create_app():
         return render_template("details.html", event=event)
     
     @app.route("/delete/<event_id>")
+    @flask_login.login_required
     def delete_event(event_id):
         user_id = flask_login.current_user.id
 
@@ -172,6 +177,7 @@ def create_app():
         return redirect(url_for("show_home"))
     
     @app.route("/search")
+    @flask_login.login_required
     def show_search():
         """
         Route for GET requests to the search page
@@ -179,11 +185,14 @@ def create_app():
         Returns: render_template (html for search page)
         """
         search_term = request.args.get("searchterm", "")
+        user_id = flask_login.current_user.id
 
         events = list(db.events.find({
+            "user_id": user_id,
             "$or": [
                 {"name": {"$regex": search_term, "$options": "i"}},
                 {"date": {"$regex": search_term, "$options": "i"}},
+                {"time": {"$regex": search_term, "$options": "i"}},
                 {"description": {"$regex": search_term, "$options": "i"}},
                 {"location": {"$regex": search_term, "$options": "i"}},
                 {"category": {"$regex": search_term, "$options": "i"}}

@@ -61,10 +61,9 @@ label {
 input, textarea, select {
     padding: 10px;
     margin-top: 5px;
-    border-color: #5e376d;
     color: #5e376d;
     background-color: #f6e6e8;
-    /*border: 1px solid #bbe7fe;*/
+    border: solid 1.5px #5e376d;
 }
 
 textarea {
