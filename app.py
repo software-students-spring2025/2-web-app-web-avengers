@@ -185,8 +185,10 @@ def create_app():
         Returns: render_template (html for search page)
         """
         search_term = request.args.get("searchterm", "")
+        user_id = flask_login.current_user.id
 
         events = list(db.events.find({
+            "user_id": user_id,
             "$or": [
                 {"name": {"$regex": search_term, "$options": "i"}},
                 {"date": {"$regex": search_term, "$options": "i"}},
